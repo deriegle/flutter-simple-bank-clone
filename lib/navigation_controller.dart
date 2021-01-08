@@ -7,6 +7,10 @@ class NavigationController {
 
   static NavigationController of(BuildContext context) => NavigationController(context);
 
+  void pop<T extends Object>([T obj]) {
+    Navigator.of(context).pop<T>(obj);
+  }
+
   void push(Widget widget) {
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => widget));
   }

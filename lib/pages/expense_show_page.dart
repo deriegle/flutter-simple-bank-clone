@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simple_expenses/date_formatter.dart';
 import 'package:simple_expenses/models/expense.dart';
+import 'package:simple_expenses/navigation_controller.dart';
+import 'package:simple_expenses/pages/memo_edit_page.dart';
 
 class ExpenseShowPage extends StatefulWidget {
   final Expense expense;
@@ -103,13 +105,18 @@ class _ExpenseShowPageState extends State<ExpenseShowPage> {
                       ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      widget.expense.notes.isEmpty
-                          ? 'Add notes, #hashtags, and emojis here'
-                          : widget.expense.notes,
-                      style: TextStyle(color: Colors.grey),
+                  GestureDetector(
+                    onTap: () {
+                      NavigationController.of(context).push(MemoEditPage(expense: widget.expense));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        widget.expense.notes.isEmpty
+                            ? 'Add notes, #hashtags, and emojis here'
+                            : widget.expense.notes,
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                   ),
                   Container(
