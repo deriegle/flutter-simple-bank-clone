@@ -15,6 +15,8 @@ class MyApp extends StatelessWidget {
 }
 
 class AppDrawer extends StatelessWidget {
+  get backgroundColor => Colors.black.withAlpha(175);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -33,39 +35,59 @@ class AppDrawer extends StatelessWidget {
                 SizedBox(width: 20),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Devin Riegle', style: TextStyle(fontSize: 15)),
-                    Text('Your account', style: TextStyle(color: Colors.black.withAlpha(150))),
+                    Text(
+                      'Devin Riegle',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text('Your account', style: TextStyle(color: Colors.white)),
                   ],
                 ),
               ],
             ),
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: backgroundColor,
+              border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
             ),
           ),
-          ListTile(
-            title: Text('Activity'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title: Text('Scheduled'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
-          ListTile(
-            title: Text('Goals'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-            },
-          ),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Activity', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Scheduled', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Expenses', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Goals', onPressed: () {}),
+          Container(height: 1, color: Colors.grey),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Move money', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Rules', onPressed: () {}),
+          Container(height: 1, color: Colors.grey),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Simple Bulletin', onPressed: () {}),
+          Container(height: 1, color: Colors.grey),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Refer a friend', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Support', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Personal Info', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Account details', onPressed: () {}),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'App settings', onPressed: () {}),
+          Container(height: 1, color: Colors.grey),
+          _buildDrawerItem(icon: Icons.ac_unit, title: 'Sign out', onPressed: () {}),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDrawerItem({
+    @required IconData icon,
+    @required String title,
+    @required Function onPressed,
+  }) {
+    return Container(
+      color: backgroundColor,
+      child: ListTile(
+        leading: Icon(icon, color: Colors.white),
+        title: Text(title, style: TextStyle(color: Colors.white)),
+        onTap: onPressed,
       ),
     );
   }
