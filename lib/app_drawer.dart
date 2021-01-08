@@ -46,19 +46,19 @@ class AppDrawer extends StatelessWidget {
             _buildDrawerItem(icon: Icons.date_range, title: 'Scheduled', onPressed: () {}),
             _buildDrawerItem(icon: Icons.table_chart, title: 'Expenses', onPressed: () {}),
             _buildDrawerItem(icon: Icons.trending_up, title: 'Goals', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
+            separator,
             _buildDrawerItem(icon: Icons.attach_money, title: 'Move money', onPressed: () {}),
             _buildDrawerItem(icon: Icons.check, title: 'Rules', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
+            separator,
             _buildDrawerItem(icon: Icons.notifications, title: 'Simple Bulletin', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
+            separator,
             _buildDrawerItem(icon: Icons.card_giftcard, title: 'Refer a friend', onPressed: () {}),
             _buildDrawerItem(icon: Icons.chat, title: 'Support', onPressed: () {}),
             _buildDrawerItem(icon: Icons.person, title: 'Personal Info', onPressed: () {}),
             _buildDrawerItem(
                 icon: Icons.account_balance, title: 'Account details', onPressed: () {}),
             _buildDrawerItem(icon: Icons.settings, title: 'App settings', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
+            separator,
             _buildDrawerItem(
                 icon: Icons.signal_cellular_4_bar, title: 'Sign out', onPressed: () {}),
           ],
@@ -66,6 +66,8 @@ class AppDrawer extends StatelessWidget {
       ),
     );
   }
+
+  Widget get separator => Container(height: 1, color: Colors.grey);
 
   Widget _buildDrawerItem({
     @required IconData icon,
@@ -77,7 +79,6 @@ class AppDrawer extends StatelessWidget {
       child: ListTile(
         leading: Icon(icon, color: Colors.black),
         title: Text(title, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        selected: false,
         dense: true,
         onTap: onPressed,
       ),
