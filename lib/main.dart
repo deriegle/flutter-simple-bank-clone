@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_expenses/expense_list.dart';
 import 'package:simple_expenses/more_actions_button.dart';
 import 'package:simple_expenses/safe_to_spend.dart';
 import 'package:simple_expenses/app_drawer.dart';
@@ -61,18 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: <Widget>[MoreActionsButton(onSelected: onMoreActionPress)],
         bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
+      body: ExpenseList(),
       drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
