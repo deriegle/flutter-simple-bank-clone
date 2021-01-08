@@ -9,6 +9,64 @@ class MyApp extends StatelessWidget {
       title: 'Simple Expenses',
       theme: ThemeData(primarySwatch: Colors.blueGrey),
       home: MyHomePage(title: 'Activity'),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class AppDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(top: 50, left: 20, bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage: NetworkImage('https://picsum.photos/50'),
+                  maxRadius: 20,
+                ),
+                SizedBox(width: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Devin Riegle', style: TextStyle(fontSize: 15)),
+                    Text('Your account', style: TextStyle(color: Colors.black.withAlpha(150))),
+                  ],
+                ),
+              ],
+            ),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+            ),
+          ),
+          ListTile(
+            title: Text('Activity'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+          ListTile(
+            title: Text('Scheduled'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+          ListTile(
+            title: Text('Goals'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -146,10 +204,6 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.black.withAlpha(230),
         title: Text(widget.title),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: onHamburgerMenuPress,
-        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -170,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
