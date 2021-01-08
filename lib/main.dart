@@ -28,12 +28,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  TextEditingController searchTextController;
+  bool isSearching = false;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  String get searchText => searchTextController.text;
+
+  @override
+  void initState() {
+    searchTextController = TextEditingController(text: '');
+    super.initState();
   }
 
   void onMoreActionPress(MoreActions action) {
@@ -53,21 +56,66 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  AppBar buildAppBar(BuildContext context) {
+    final backgroundColor = Colors.black.withAlpha(230);
+    final safeToSpend = SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context));
+
+    if (isSearching) {
+      return AppBar(
+        backgroundColor: backgroundColor,
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              isSearching = false;
+            });
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: TextField(
+          autofocus: true,
+          maxLines: 1,
+          controller: searchTextController,
+          onChanged: (t) => setState(() {}),
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          searchText.isEmpty
+              ? Container()
+              : IconButton(
+                  icon: Icon(Icons.clear),
+                  onPressed: () {
+                    searchTextController.text = '';
+                  },
+                ),
+        ],
+        bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
+      );
+    }
+
+    return AppBar(
+      backgroundColor: backgroundColor,
+      title: Text(widget.title),
+      actions: <Widget>[MoreActionsButton(onSelected: onMoreActionPress)],
+      bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black.withAlpha(230),
-        title: Text(widget.title),
-        actions: <Widget>[MoreActionsButton(onSelected: onMoreActionPress)],
-        bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
-      ),
+      appBar: buildAppBar(context),
       body: ExpenseList(),
       drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: () {
+          setState(() {
+            searchTextController.text = '';
+            isSearching = true;
+          });
+        },
+        backgroundColor: Colors.blue,
+        tooltip: 'Search for transactions',
+        child: Icon(Icons.search),
       ),
     );
   }
