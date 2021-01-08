@@ -6,6 +6,7 @@ class Expense {
   final String notes;
   final String name;
   final String category;
+  final String location;
 
   Expense({
     @required this.amount,
@@ -13,5 +14,6 @@ class Expense {
     @required this.notes,
     @required this.name,
     @required this.category,
+    this.location,
   });
 }

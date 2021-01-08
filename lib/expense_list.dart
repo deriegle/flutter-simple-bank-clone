@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:simple_expenses/date_formatter.dart';
+import 'package:simple_expenses/navigation_controller.dart';
+import 'package:simple_expenses/pages/expense_show_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:simple_expenses/models/expense.dart';
 
@@ -13,32 +16,6 @@ final listOfDates = [
   DateTime.parse('2020-11-01'),
 ];
 
-const months = [
-  null,
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'November',
-  'December',
-];
-
-const dayOfWeek = [
-  null,
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
-
 class ExpenseTile extends StatelessWidget {
   final Expense expense;
   final bool isFirst;
@@ -47,30 +24,35 @@ class ExpenseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: isFirst
-            ? null
-            : Border(
-                top: BorderSide(width: 1, color: Colors.white10),
-              ),
-        color: Colors.white12,
-      ),
-      child: ListTile(
-        leading: CircleAvatar(child: Text('D')),
-        title:
-            Text(expense.name, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Text('Spent from Safe-to-Spend', style: TextStyle(color: Colors.grey)),
+    return GestureDetector(
+      onTap: () {
+        NavigationController.of(context).push(ExpenseShowPage(expense: expense));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: isFirst
+              ? null
+              : Border(
+                  top: BorderSide(width: 1, color: Colors.white10),
+                ),
+          color: Colors.white12,
         ),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Text('\$${expense.amount.toStringAsFixed(2)}', style: TextStyle(color: Colors.red)),
-            Text(expense.category, style: TextStyle(color: Colors.grey)),
-          ],
+        child: ListTile(
+          leading: CircleAvatar(child: Text('D')),
+          title: Text(expense.name,
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text('Spent from Safe-to-Spend', style: TextStyle(color: Colors.grey)),
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text('\$${expense.amount.toStringAsFixed(2)}', style: TextStyle(color: Colors.red)),
+              Text(expense.category, style: TextStyle(color: Colors.grey)),
+            ],
+          ),
         ),
       ),
     );
@@ -78,17 +60,6 @@ class ExpenseTile extends StatelessWidget {
 }
 
 class ExpenseList extends StatelessWidget {
-  String formattedDate(DateTime d) {
-    final inTheLastWeek = DateTime.now().difference(d).inDays <= 7;
-    final month = months[d.month];
-
-    if (inTheLastWeek) {
-      return '${dayOfWeek[d.weekday]}, $month ${d.day}';
-    }
-
-    return '$month ${d.day}, ${d.year}';
-  }
-
   Widget buildExpenseListForIndex(int index) {
     if (index.isEven) {
       return Column(
@@ -172,7 +143,7 @@ class ExpenseList extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
               child: Text(
-                formattedDate(listOfDates[index]),
+                DateFormatter.formatForExpenseList(listOfDates[index]),
                 style: const TextStyle(color: Colors.white),
               ),
             ),
