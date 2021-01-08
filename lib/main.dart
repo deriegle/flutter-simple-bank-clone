@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:simple_expenses/more_actions_button.dart';
+import 'package:simple_expenses/safe_to_spend.dart';
+import 'package:simple_expenses/app_drawer.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,91 +17,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AppDrawer extends StatelessWidget {
-  get backgroundColor => Colors.white;
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: backgroundColor,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(top: 50, left: 20, bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage('https://picsum.photos/50'),
-                    maxRadius: 20,
-                  ),
-                  SizedBox(width: 20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Devin Riegle',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text('Your account', style: TextStyle(color: Colors.black.withAlpha(200))),
-                    ],
-                  ),
-                ],
-              ),
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
-              ),
-            ),
-            _buildDrawerItem(icon: Icons.ac_unit, title: 'Activity', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.date_range, title: 'Scheduled', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.table_chart, title: 'Expenses', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.trending_up, title: 'Goals', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
-            _buildDrawerItem(icon: Icons.attach_money, title: 'Move money', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.check, title: 'Rules', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
-            _buildDrawerItem(icon: Icons.notifications, title: 'Simple Bulletin', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
-            _buildDrawerItem(icon: Icons.card_giftcard, title: 'Refer a friend', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.chat, title: 'Support', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.person, title: 'Personal Info', onPressed: () {}),
-            _buildDrawerItem(
-                icon: Icons.account_balance, title: 'Account details', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.settings, title: 'App settings', onPressed: () {}),
-            Container(height: 1, color: Colors.grey),
-            _buildDrawerItem(
-                icon: Icons.signal_cellular_4_bar, title: 'Sign out', onPressed: () {}),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    @required IconData icon,
-    @required String title,
-    @required Function onPressed,
-  }) {
-    return Container(
-      color: backgroundColor,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.black),
-        title: Text(title, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-        selected: false,
-        dense: true,
-        onTap: onPressed,
-      ),
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -107,106 +25,6 @@ class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
-class SafeToSpend extends StatelessWidget implements PreferredSizeWidget {
-  final double amount;
-  final Function onPressed;
-
-  const SafeToSpend({
-    Key key,
-    @required this.amount,
-    @required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        margin: const EdgeInsets.only(top: 1),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage('https://picsum.photos/50'),
-                  maxRadius: 10,
-                ),
-                SizedBox(width: 10),
-                Text('Safe-to-Spend', style: TextStyle(color: Colors.white)),
-              ],
-            ),
-            Text('\$${amount.toStringAsFixed(2)}', style: TextStyle(color: Colors.white))
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => Size(300, 40);
-}
-
-class SafeToSpendDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.grey,
-      titlePadding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-      titleTextStyle: TextStyle(fontSize: 15, color: Colors.black),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('Available balance', style: TextStyle(color: Colors.white)),
-          Text('\$14.63', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        ],
-      ),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('- Expenses', style: TextStyle(color: Colors.white.withAlpha(200))),
-                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('- Goals', style: TextStyle(color: Colors.white.withAlpha(200))),
-                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('- Scheduled', style: TextStyle(color: Colors.white.withAlpha(200))),
-                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Safe-to-Spend', style: TextStyle(color: Colors.white)),
-                  Text('\$14.63',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-enum MoreActions { refresh }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
@@ -217,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  onMoreActionPress(MoreActions action) {
+  void onMoreActionPress(MoreActions action) {
     switch (action) {
       case MoreActions.refresh:
         print('refreshing app....');
@@ -240,18 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.black.withAlpha(230),
         title: Text(widget.title),
-        actions: <Widget>[
-          PopupMenuButton(
-            itemBuilder: (context) => <PopupMenuEntry<MoreActions>>[
-              const PopupMenuItem<MoreActions>(
-                child: Text('Refresh'),
-                value: MoreActions.refresh,
-              ),
-            ],
-            onSelected: onMoreActionPress,
-            icon: Icon(Icons.more_vert),
-          )
-        ],
+        actions: <Widget>[MoreActionsButton(onSelected: onMoreActionPress)],
         bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
       ),
       body: Center(
