@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simple_expenses/models/expense.dart';
 import 'package:simple_expenses/navigation_controller.dart';
+import 'package:simple_expenses/register_services.dart';
+import 'package:simple_expenses/services/expense_service.dart';
 
 class MemoEditPage extends StatefulWidget {
   final Expense expense;
@@ -69,7 +71,9 @@ class _MemoEditPageState extends State<MemoEditPage> {
                   child: Text('Save'),
                   color: Colors.blue,
                   onPressed: () async {
-                    await widget.expense.updateNotes(memoTextController.text);
+                    getIt
+                        .get<ExpenseService>()
+                        .updateNotes(widget.expense.id, memoTextController.text);
                     NavigationController.of(context).pop();
                   }),
             ),

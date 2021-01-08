@@ -2,19 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:simple_expenses/date_formatter.dart';
 import 'package:simple_expenses/navigation_controller.dart';
 import 'package:simple_expenses/pages/expense_show_page.dart';
+import 'package:simple_expenses/register_services.dart';
+import 'package:simple_expenses/services/expense_service.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:simple_expenses/models/expense.dart';
-
-final listOfDates = [
-  DateTime.now(),
-  DateTime.parse('2021-01-03'),
-  DateTime.parse('2021-01-01'),
-  DateTime.parse('2020-11-25'),
-  DateTime.parse('2020-11-15'),
-  DateTime.parse('2020-11-10'),
-  DateTime.parse('2020-11-05'),
-  DateTime.parse('2020-11-01'),
-];
 
 class ExpenseTile extends StatelessWidget {
   final Expense expense;
@@ -60,97 +51,58 @@ class ExpenseTile extends StatelessWidget {
 }
 
 class ExpenseList extends StatelessWidget {
-  Widget buildExpenseListForIndex(int index) {
-    if (index.isEven) {
-      return Column(
-        children: <Widget>[
-          ExpenseTile(
-            isFirst: true,
-            expense: Expense(
-              amount: 23.95,
-              name: 'Chipotle Online',
-              date: DateTime.now(),
-              category: 'Fast Food',
-              notes: '',
-            ),
-          ),
-          ExpenseTile(
-            isFirst: false,
-            expense: Expense(
-              amount: 12.50,
-              name: 'Crimson Cup Coffee',
-              date: DateTime.now(),
-              category: 'Coffee & Tea',
-              notes: '',
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          ExpenseTile(
-            isFirst: true,
-            expense: Expense(
-              amount: 12.50,
-              name: 'Crimson Cup Coffee',
-              date: DateTime.now(),
-              category: 'Coffee & Tea',
-              notes: '',
-            ),
-          ),
-          ExpenseTile(
-            isFirst: false,
-            expense: Expense(
-              amount: 15.04,
-              name: 'Amazon.com',
-              date: DateTime.now(),
-              category: 'Books',
-              notes: '',
-            ),
-          ),
-          ExpenseTile(
-            isFirst: false,
-            expense: Expense(
-              amount: 151.06,
-              name: 'Market District',
-              date: DateTime.now(),
-              category: 'Groceries',
-              notes: '',
-            ),
-          ),
-        ],
-      );
-    }
-  }
+  final String searchText;
+
+  const ExpenseList({Key key, this.searchText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final service = getIt.get<ExpenseService>();
+    final dates = service.allDates();
+
     return Container(
       color: Colors.black,
       child: ListView.builder(
         itemBuilder: (context, index) {
+          final date = dates[index];
+          final expenses = service.findByDate(date);
+          final filteredExpenses = searchText != null && searchText.isNotEmpty
+              ? expenses
+                  .where((e) => e.name.toLowerCase().contains(searchText.toLowerCase()))
+                  .toList()
+              : expenses;
+
+          if (filteredExpenses.isEmpty) {
+            return Container();
+          }
+
           return StickyHeader(
-            header: Container(
-              height: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                border: Border(
-                  top: BorderSide(color: Colors.white30, width: 0.5),
-                  bottom: BorderSide(color: Colors.white30, width: 0.5),
+              header: Container(
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  border: Border(
+                    top: BorderSide(color: Colors.white30, width: 0.5),
+                    bottom: BorderSide(color: Colors.white30, width: 0.5),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  DateFormatter.formatForExpenseList(date),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                DateFormatter.formatForExpenseList(listOfDates[index]),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            content: buildExpenseListForIndex(index),
-          );
+              content: Column(
+                children: filteredExpenses.asMap().entries.map<Widget>((entry) {
+                  return ExpenseTile(
+                    expense: entry.value,
+                    isFirst: entry.key == 0,
+                  );
+                }).toList(),
+              ));
         },
-        itemCount: listOfDates.length,
+        itemCount: dates.length,
       ),
     );
   }

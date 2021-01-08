@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:simple_expenses/app_drawer.dart';
 import 'package:simple_expenses/expense_list.dart';
 import 'package:simple_expenses/more_actions_button.dart';
+import 'package:simple_expenses/register_services.dart';
 import 'package:simple_expenses/safe_to_spend.dart';
+import 'package:simple_expenses/services/expense_service.dart';
 
 class ActivityPage extends StatefulWidget {
   @override
@@ -21,10 +23,12 @@ class _ActivityPageState extends State<ActivityPage> {
     super.initState();
   }
 
-  void onMoreActionPress(MoreActions action) {
+  void onMoreActionPress(MoreActions action) async {
     switch (action) {
       case MoreActions.refresh:
         print('refreshing app....');
+        await getIt.get<ExpenseService>().load();
+        break;
     }
   }
 
@@ -58,6 +62,7 @@ class _ActivityPageState extends State<ActivityPage> {
           maxLines: 1,
           controller: searchTextController,
           onChanged: (t) => setState(() {}),
+          onSubmitted: (t) {},
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
@@ -66,7 +71,9 @@ class _ActivityPageState extends State<ActivityPage> {
               : IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
-                    searchTextController.text = '';
+                    setState(() {
+                      searchTextController.text = '';
+                    });
                   },
                 ),
         ],
@@ -86,7 +93,9 @@ class _ActivityPageState extends State<ActivityPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: ExpenseList(),
+      body: ExpenseList(
+        searchText: searchTextController.text,
+      ),
       drawer: AppDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

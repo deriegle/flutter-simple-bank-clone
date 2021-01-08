@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:simple_expenses/uuid.dart';
 
 class Expense {
+  final String id;
   final double amount;
   final DateTime date;
   final String transactionName;
@@ -11,13 +13,15 @@ class Expense {
   String _notes;
 
   Expense({
+    String id,
     @required this.amount,
     @required this.date,
     @required String notes,
     @required String name,
     @required this.category,
     this.location,
-  })  : transactionName = name,
+  })  : this.id = id ?? uuid.v4(),
+        transactionName = name,
         _name = name,
         _notes = notes;
 
