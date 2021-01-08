@@ -150,6 +150,64 @@ class SafeToSpend extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size(300, 40);
 }
 
+class SafeToSpendDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.grey,
+      titlePadding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      titleTextStyle: TextStyle(fontSize: 15, color: Colors.black),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text('Available balance', style: TextStyle(color: Colors.white)),
+          Text('\$14.63', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ],
+      ),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('- Expenses', style: TextStyle(color: Colors.white.withAlpha(200))),
+                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('- Goals', style: TextStyle(color: Colors.white.withAlpha(200))),
+                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('- Scheduled', style: TextStyle(color: Colors.white.withAlpha(200))),
+                Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('Safe-to-Spend', style: TextStyle(color: Colors.white)),
+                  Text('\$14.63',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum MoreActions { refresh }
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
@@ -159,69 +217,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  onHamburgerMenuPress() {
-    print('hamburger menu pressed');
+  onMoreActionPress(MoreActions action) {
+    switch (action) {
+      case MoreActions.refresh:
+        print('refreshing app....');
+    }
   }
 
-  onMoreActionPress() {
-    print('More pressed');
-  }
-
-  onSafeToSpendPress(BuildContext ctx) async {
+  onSafeToSpendPress(BuildContext ctx) {
     return showDialog<void>(
       context: ctx,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey,
-          titlePadding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          titleTextStyle: TextStyle(fontSize: 15, color: Colors.black),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('Available balance', style: TextStyle(color: Colors.white)),
-              Text('\$14.63', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('- Expenses', style: TextStyle(color: Colors.white.withAlpha(200))),
-                    Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('- Goals', style: TextStyle(color: Colors.white.withAlpha(200))),
-                    Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('- Scheduled', style: TextStyle(color: Colors.white.withAlpha(200))),
-                    Text('\$0.00', style: TextStyle(color: Colors.white.withAlpha(200))),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Safe-to-Spend', style: TextStyle(color: Colors.white)),
-                      Text('\$14.63',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return SafeToSpendDialog();
       },
     );
   }
@@ -233,9 +241,15 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.black.withAlpha(230),
         title: Text(widget.title),
         actions: <Widget>[
-          IconButton(
+          PopupMenuButton(
+            itemBuilder: (context) => <PopupMenuEntry<MoreActions>>[
+              const PopupMenuItem<MoreActions>(
+                child: Text('Refresh'),
+                value: MoreActions.refresh,
+              ),
+            ],
+            onSelected: onMoreActionPress,
             icon: Icon(Icons.more_vert),
-            onPressed: onMoreActionPress,
           )
         ],
         bottom: SafeToSpend(amount: 0, onPressed: () => onSafeToSpendPress(context)),
