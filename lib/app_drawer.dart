@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:simple_expenses/navigation_controller.dart';
+import 'package:simple_expenses/pages/activity_page.dart';
+import 'package:simple_expenses/pages/goals_page.dart';
 
 class AppDrawer extends StatelessWidget {
   get backgroundColor => Colors.white;
@@ -42,10 +45,17 @@ class AppDrawer extends StatelessWidget {
                 border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
               ),
             ),
-            _buildDrawerItem(icon: Icons.ac_unit, title: 'Activity', onPressed: () {}),
+            _buildDrawerItem(
+                icon: Icons.ac_unit,
+                title: 'Activity',
+                onPressed: () => NavigationController.of(context).push(ActivityPage())),
             _buildDrawerItem(icon: Icons.date_range, title: 'Scheduled', onPressed: () {}),
             _buildDrawerItem(icon: Icons.table_chart, title: 'Expenses', onPressed: () {}),
-            _buildDrawerItem(icon: Icons.trending_up, title: 'Goals', onPressed: () {}),
+            _buildDrawerItem(
+              icon: Icons.trending_up,
+              title: 'Goals',
+              onPressed: () => NavigationController.of(context).push(GoalsPage()),
+            ),
             separator,
             _buildDrawerItem(icon: Icons.attach_money, title: 'Move money', onPressed: () {}),
             _buildDrawerItem(icon: Icons.check, title: 'Rules', onPressed: () {}),

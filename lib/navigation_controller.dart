@@ -11,7 +11,12 @@ class NavigationController {
     Navigator.of(context).pop<T>(obj);
   }
 
-  void push(Widget widget) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => widget));
+  void push(Widget widget, {bool fullScreenDialog = false}) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => widget,
+        fullscreenDialog: fullScreenDialog,
+      ),
+    );
   }
 }

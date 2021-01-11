@@ -26,7 +26,6 @@ class _ActivityPageState extends State<ActivityPage> {
   void onMoreActionPress(MoreActions action) async {
     switch (action) {
       case MoreActions.refresh:
-        print('refreshing app....');
         await getIt.get<ExpenseService>().load();
         break;
     }
